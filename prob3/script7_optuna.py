@@ -14,6 +14,8 @@ N_EPOCHS = 10
 
 
 def build_model(n_hidden):
+    # Same architecture as FashionClassifier, but with a tunable hidden width
+    # shared by both hidden layers.
     return nn.Sequential(
         nn.Flatten(),
         nn.Linear(28 * 28, n_hidden),
@@ -25,6 +27,7 @@ def build_model(n_hidden):
 
 
 def objective(trial):
+    # Sample a learning rate (log scale) and shared hidden-layer width.
     lr = trial.suggest_float("lr", 1e-5, 1e-1, log=True)
     n_hidden = trial.suggest_int("n_hidden", 20, 300)
 
@@ -34,11 +37,11 @@ def objective(trial):
     optimizer = optim.SGD(model.parameters(), lr=lr)
 
     history = train(model, train_loader, valid_loader, loss_fn, optimizer, N_EPOCHS, device)
-    return max(history["val_accuracy"])
+    return max(history["val_accuracy"])  # score = best validation accuracy across epochs
 
 
 if __name__ == "__main__":
-    sampler = optuna.samplers.TPESampler(seed=SEED)
+    sampler = optuna.samplers.TPESampler(seed=SEED)  # seeded sampler for reproducible trials
     study = optuna.create_study(direction="maximize", sampler=sampler)
     study.optimize(objective, n_trials=N_TRIALS)
 

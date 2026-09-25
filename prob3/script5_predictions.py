@@ -14,6 +14,7 @@ TOP_K = 4
 optimizer = optim.SGD(model.parameters(), lr=LEARNING_RATE)
 train(model, train_loader, valid_loader, loss_fn, optimizer, N_EPOCHS, device)
 
+# Total trainable + non-trainable parameter count of the model.
 n_params = sum(p.numel() for p in model.parameters())
 print(f"\nTotal number of parameters: {n_params:,}")
 
@@ -23,7 +24,7 @@ labels = [valid_dataset[i][1] for i in range(N_SAMPLES)]
 
 with torch.no_grad():
     logits = model(images)
-    probabilities = torch.softmax(logits, dim=1)
+    probabilities = torch.softmax(logits, dim=1)  # convert logits to per-class probabilities
     predictions = torch.argmax(probabilities, dim=1)
 
 for i in range(N_SAMPLES):
@@ -38,7 +39,7 @@ for i in range(N_SAMPLES):
     for class_idx, class_name in enumerate(CLASS_NAMES):
         print(f"    {class_name:<15} {probabilities[i, class_idx].item():.4f}")
 
-    top_probs, top_classes = torch.topk(probabilities[i], TOP_K)
+    top_probs, top_classes = torch.topk(probabilities[i], TOP_K)  # 4 most likely classes
     print(f"  Top {TOP_K} most likely classes:")
     for prob, class_idx in zip(top_probs, top_classes):
         print(f"    {CLASS_NAMES[class_idx.item()]:<15} {prob.item():.4f}")

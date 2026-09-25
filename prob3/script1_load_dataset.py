@@ -10,6 +10,7 @@ N_VALID = 5_000
 
 torch.manual_seed(SEED)
 
+# ToTensor() converts each PIL image to a float tensor scaled to [0, 1].
 full_train_dataset = datasets.FashionMNIST(
     root="data",
     train=True,
@@ -24,6 +25,7 @@ test_dataset = datasets.FashionMNIST(
     transform=ToTensor(),
 )
 
+# Split the 60,000-image training set into 55,000 train / 5,000 validation.
 n_train = len(full_train_dataset) - N_VALID
 generator = torch.Generator().manual_seed(SEED)
 train_dataset, valid_dataset = random_split(

@@ -24,6 +24,7 @@ def train(model, train_loader, valid_loader, loss_fn, optimizer, n_epochs, devic
     val_accuracy = Accuracy(task="multiclass", num_classes=10).to(device)
 
     for epoch in range(n_epochs):
+        # --- training pass ---
         model.train()
         train_accuracy.reset()
         running_loss = 0.0
@@ -43,6 +44,7 @@ def train(model, train_loader, valid_loader, loss_fn, optimizer, n_epochs, devic
         epoch_loss = running_loss / len(train_loader.dataset)
         epoch_train_accuracy = train_accuracy.compute().item()
 
+        # --- validation pass (no gradients) ---
         model.eval()
         val_accuracy.reset()
         with torch.no_grad():

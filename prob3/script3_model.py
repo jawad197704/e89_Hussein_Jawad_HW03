@@ -11,6 +11,8 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 
 class FashionClassifier(nn.Module):
+    """Flatten -> Dense(300, ReLU) -> Dense(100, ReLU) -> Dense(10)."""
+
     def __init__(self):
         super().__init__()
         self.flatten = nn.Flatten()
@@ -23,7 +25,7 @@ class FashionClassifier(nn.Module):
         x = self.flatten(x)
         x = self.relu(self.hidden1(x))
         x = self.relu(self.hidden2(x))
-        return self.output(x)
+        return self.output(x)  # raw logits; CrossEntropyLoss applies softmax internally
 
 
 model = FashionClassifier().to(device)

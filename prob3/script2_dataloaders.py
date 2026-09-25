@@ -19,11 +19,13 @@ CLASS_NAMES = [
     "Ankle boot",
 ]
 
+# Only the training loader is shuffled; validation/test order doesn't matter.
 train_loader = DataLoader(train_dataset, batch_size=BATCH_SIZE, shuffle=True)
 valid_loader = DataLoader(valid_dataset, batch_size=BATCH_SIZE, shuffle=False)
 test_loader = DataLoader(test_dataset, batch_size=BATCH_SIZE, shuffle=False)
 
 if __name__ == "__main__":
+    # Inspect the first training sample: shape, dtype, and class name.
     image, label = train_dataset[0]
     print(f"Image shape: {image.shape}")
     print(f"Image dtype: {image.dtype}")

@@ -27,6 +27,7 @@ def build_model(n_hidden):
 
 
 def train_one_epoch(model, loader, loss_fn, optimizer, device):
+    """Run a single training epoch (no accuracy tracking needed here)."""
     model.train()
     for images, labels in loader:
         images, labels = images.to(device), labels.to(device)
@@ -49,6 +50,8 @@ def evaluate_accuracy(model, loader, device):
 
 
 def objective(trial, train_loader, valid_loader, device):
+    # Data loaders and device are passed in explicitly rather than read from
+    # module-level globals, per the assignment requirement.
     lr = trial.suggest_float("lr", 1e-5, 1e-1, log=True)
     n_hidden = trial.suggest_int("n_hidden", 20, 300)
 
@@ -63,6 +66,8 @@ def objective(trial, train_loader, valid_loader, device):
         val_accuracy = evaluate_accuracy(model, valid_loader, device)
         best_val_accuracy = max(best_val_accuracy, val_accuracy)
 
+        # Report this epoch's accuracy so the median pruner can compare this
+        # trial's progress against prior trials at the same epoch.
         trial.report(val_accuracy, epoch)
         if trial.should_prune():
             raise optuna.TrialPruned()
@@ -72,7 +77,7 @@ def objective(trial, train_loader, valid_loader, device):
 
 if __name__ == "__main__":
     sampler = optuna.samplers.TPESampler(seed=SEED)
-    pruner = optuna.pruners.MedianPruner()
+    pruner = optuna.pruners.MedianPruner()  # stops trials falling below the median early
     study = optuna.create_study(direction="maximize", sampler=sampler, pruner=pruner)
     study.optimize(
         partial(objective, train_loader=train_loader, valid_loader=valid_loader, device=device),

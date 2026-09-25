@@ -10,6 +10,7 @@ from script4_train import LEARNING_RATE, N_EPOCHS, train
 optimizer = optim.SGD(model.parameters(), lr=LEARNING_RATE)
 history = train(model, train_loader, valid_loader, loss_fn, optimizer, N_EPOCHS, device)
 
+# Plot training accuracy (from history["train_accuracy"]) against epoch number.
 epochs = range(1, N_EPOCHS + 1)
 plt.plot(epochs, history["train_accuracy"], marker="o", label="Training accuracy")
 plt.xlabel("Epoch")
