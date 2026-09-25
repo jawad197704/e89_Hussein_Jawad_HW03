@@ -8,15 +8,21 @@ standalone scripts and then combined into one notebook,
 
 ## Request and approach
 
-Jawad asked for the pipeline to be built incrementally as separate scripts
-(so each step could be checked on its own), then assembled into a single
-notebook that runs top to bottom, with a markdown cell introducing each
-script and short comments inside the code. The notebook needed a title cell
-("CSCI E-89 Homework 03, Problem 3" / Jawad Hussein), and everything had to
-live under a new `prob3/` folder in the repo. The instructions also asked
-for a smoke test — run the notebook once with quick settings (1 training
-epoch, 2 Optuna trials) to catch errors cheaply — before restoring the full
-settings (20 epochs; 5 and 20 Optuna trials) for the final, committed run.
+Jawad asked for everything in a single prompt: all eight scripts, the
+notebook that combines them, and this summary. The pipeline was not built
+incrementally in back-and-forth exchanges — the eight separate scripts
+were themselves part of what that one prompt specified, along with the
+notebook's structure (a title cell; a labeled, descriptive markdown cell
+before each script's code cell; short inline comments), the `prob3/`
+folder location, the notebook's exact filename, and the two-stage
+verification (run once with quick settings — 1 training epoch, 2 Optuna
+trials — to catch errors cheaply, then restore the full settings — 20
+epochs; 5 and 20 Optuna trials — for the final, committed run).
+
+The generated code needed no corrections. The only follow-up was a second
+request to fix the wording of this section (it had incorrectly described
+the work as incremental) and to add the original prompt and this summary
+into the notebook itself, as markdown cells.
 
 ## Scripts
 
@@ -83,25 +89,13 @@ reused directly by the Script 5 (predictions) and Script 6 (plotting) cells,
 rather than retraining redundantly as the standalone `.py` scripts do when
 run independently.
 
-## Corrections made along the way
+## Follow-up request
 
-- **Reorganized into `prob3/`.** The scripts, notebook, dialog summary, and
-  training-accuracy plot were moved into a new `prob3/` folder as requested,
-  and the notebook was renamed from an earlier working name to
-  `e89_Hussein_Jawad_HW03_Prob3.ipynb`.
-- **Title cell rewritten** to the exact required text ("CSCI E-89 Homework
-  03, Problem 3") plus Jawad's name, replacing a more generic title.
-- **Markdown cells expanded** so each one explicitly names the script file
-  it corresponds to (e.g., "Script 4 — `script4_train.py`") and summarizes
-  its purpose, rather than a bare numbered heading.
-- **Inline comments added** to both the `.py` scripts and the notebook code
-  cells to call out non-obvious steps (e.g., why `ToTensor()` gives a
-  `[0, 1]`-scaled float tensor, why only the training loader is shuffled,
-  why `trial.report()` is called every epoch for the pruner).
-- **Verification run.** The notebook was first run with quick settings
-  (`N_EPOCHS = 1` for training, `N_TRIALS = 2` with 1 epoch per trial for
-  both Optuna searches) to confirm the full pipeline executes without
-  errors. The settings were then restored to the assignment's full values
-  (20 training epochs; 5 trials × 10 epochs for the basic Optuna search; 20
-  trials × up to 10 epochs with pruning) and the notebook was re-executed
-  end to end to produce the committed outputs.
+After the pipeline, notebook, and this summary were delivered, Jawad sent
+one follow-up asking for three things: correct the wording of the "Request
+and approach" section above (it had wrongly described the work as
+incremental, when it was all specified in a single prompt), insert that
+original prompt into the notebook as a markdown cell right after the
+title/name cell, and append the corrected contents of this file to the
+notebook as a markdown cell at the end. No code cells were changed to make
+these edits.
