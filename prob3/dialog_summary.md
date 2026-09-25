@@ -89,13 +89,29 @@ reused directly by the Script 5 (predictions) and Script 6 (plotting) cells,
 rather than retraining redundantly as the standalone `.py` scripts do when
 run independently.
 
-## Follow-up request
+A "Setup: installs and imports" cell runs right after the title and prompt
+cells, before Script 1. It starts with `%pip install torchmetrics optuna`
+(the two packages the notebook needs that aren't preinstalled on Google
+Colab or a fresh Anaconda environment) and then holds every import used
+anywhere in the notebook, each listed once. The eight script cells below no
+longer import anything themselves — they rely on the setup cell having
+already run. The standalone `.py` files in `prob3/` were left untouched and
+still import what they need, so each one still runs on its own.
+
+## Follow-up requests
 
 After the pipeline, notebook, and this summary were delivered, Jawad sent
-one follow-up asking for three things: correct the wording of the "Request
-and approach" section above (it had wrongly described the work as
-incremental, when it was all specified in a single prompt), insert that
-original prompt into the notebook as a markdown cell right after the
-title/name cell, and append the corrected contents of this file to the
-notebook as a markdown cell at the end. No code cells were changed to make
-these edits.
+two follow-ups.
+
+The first asked to correct the wording of the "Request and approach"
+section above (it had wrongly described the work as incremental, when it
+was all specified in a single prompt), insert that original prompt into the
+notebook as a markdown cell right after the title/name cell, and append the
+corrected contents of this file to the notebook as a markdown cell at the
+end. No code cells were changed to make these edits.
+
+The second asked for the setup cell described above: gathering the
+`%pip install` line and every import into one cell near the top of the
+notebook, and stripping the now-redundant import lines out of the eight
+script code cells (without changing anything else in them), while leaving
+the standalone `.py` scripts as they were.
